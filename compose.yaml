@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    container_name: touristagency-db
+    environment:
+      - 'POSTGRES_DB=touristagency'
+      - 'POSTGRES_PASSWORD=d8a10358-32bc-46ab-9a59-472ad1156d41'
+      - 'POSTGRES_USER=touristagency'
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    volumes:
+      - ./docker-entrypoint-initdb.d/db.sql:/docker-entrypoint-initdb.d/db.sql
+      - pgdata:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@fdobrotv.com
+      PGADMIN_DEFAULT_PASSWORD: 9a45ac97-7544-4ca8-83f0-595b9b5f42a4
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+  api-editor:
+    image: swaggerapi/swagger-editor
+    ports:
+      - "8889:8080"
+    environment:
+      SWAGGER_FILE: /specs/touristagency-v1.0.yaml
+    volumes:
+      - ./specs/touristagency-v1.0.yaml:/specs/touristagency-v1.0.yaml
+  touristagency-front:
+    build:
+      context: touristagency-front-first
+      dockerfile: Dockerfile
+    container_name: touristagency-front
+    volumes:
+      - ./touristagency-front:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    environment:
+      - NODE_ENV=production
+    entrypoint:
+      - yarn
+      - start
+volumes:
+  pgdata:
+  pgadmin:

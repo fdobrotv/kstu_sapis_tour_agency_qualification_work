@@ -1,0 +1,1684 @@
+openapi: 3.0.0
+info:
+  license:
+    name: KSTU
+  title: Tourist agency
+  version: 1.0.0
+servers:
+- url: http://127.0.0.1/v1
+- url: https://fdobrotv.com/v1
+paths:
+  /hotels:
+    get:
+      operationId: listHotels
+      parameters:
+      - description: How many items to return at one time (max 100)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 100
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hotels'
+          description: A paged array of hotels
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: List all hotels
+      tags:
+      - hotels
+      x-accepts: application/json
+      x-tags:
+      - tag: hotels
+    post:
+      operationId: createHotel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HotelIn'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hotel'
+          description: Ok
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Create a hotel
+      tags:
+      - hotels
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: hotels
+  /hotels/{id}:
+    delete:
+      operationId: deleteHotelById
+      parameters:
+      - description: The id of the resource to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Resource deleted successfully
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Delete specific hotel by id
+      tags:
+      - hotels
+      x-accepts: application/json
+      x-tags:
+      - tag: hotels
+    get:
+      operationId: showHotelById
+      parameters:
+      - description: The id of the resource to retrieve
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hotel'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Info for a specific hotel
+      tags:
+      - hotels
+      x-accepts: application/json
+      x-tags:
+      - tag: hotels
+  /rooms:
+    get:
+      operationId: listRooms
+      parameters:
+      - description: How many items to return at one time (max 100)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 100
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rooms'
+          description: A paged array of rooms
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: List all rooms
+      tags:
+      - rooms
+      x-accepts: application/json
+      x-tags:
+      - tag: rooms
+    post:
+      operationId: createRoom
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomIn'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+          description: Ok
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Create a room
+      tags:
+      - rooms
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: rooms
+  /rooms/{id}:
+    delete:
+      operationId: deleteRoomById
+      parameters:
+      - description: The id of the resource to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Resource deleted successfully
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Delete specific room by id
+      tags:
+      - rooms
+      x-accepts: application/json
+      x-tags:
+      - tag: rooms
+    get:
+      operationId: showRoomById
+      parameters:
+      - description: The id of the resource to retrieve
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Info for a specific room
+      tags:
+      - rooms
+      x-accepts: application/json
+      x-tags:
+      - tag: rooms
+  /foodOptions:
+    get:
+      operationId: listFoodOptions
+      parameters:
+      - description: How many items to return at one time (max 100)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 100
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodOptions'
+          description: A paged array of foodOptions
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: List all foodOptions
+      tags:
+      - foodOptions
+      x-accepts: application/json
+      x-tags:
+      - tag: foodOptions
+    post:
+      operationId: createFoodOption
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FoodOptionIn'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodOption'
+          description: Ok
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Create a foodOption
+      tags:
+      - foodOptions
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: foodOptions
+  /foodOptions/{id}:
+    delete:
+      operationId: deleteFoodOptionById
+      parameters:
+      - description: The id of the resource to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Resource deleted successfully
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Delete specific food option by id
+      tags:
+      - foodOptions
+      x-accepts: application/json
+      x-tags:
+      - tag: foodOptions
+    get:
+      operationId: showFoodOptionById
+      parameters:
+      - description: The id of the resource to retrieve
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodOption'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Info for a specific food option
+      tags:
+      - foodOptions
+      x-accepts: application/json
+      x-tags:
+      - tag: foodOptions
+  /transfers:
+    get:
+      operationId: listTransfers
+      parameters:
+      - description: How many items to return at one time (max 100)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 100
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfers'
+          description: A paged array of transfers
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: List all transfers
+      tags:
+      - transfers
+      x-accepts: application/json
+      x-tags:
+      - tag: transfers
+    post:
+      operationId: createTransfer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferIn'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+          description: Ok
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Create a transfer
+      tags:
+      - transfers
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: transfers
+  /transfers/{id}:
+    delete:
+      operationId: deleteTransferById
+      parameters:
+      - description: The id of the resource to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Resource deleted successfully
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Delete specific transfer by id
+      tags:
+      - transfers
+      x-accepts: application/json
+      x-tags:
+      - tag: transfers
+    get:
+      operationId: showTransferById
+      parameters:
+      - description: The id of the resource to retrieve
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Info for a specific transfer
+      tags:
+      - transfers
+      x-accepts: application/json
+      x-tags:
+      - tag: transfers
+  /flights:
+    get:
+      operationId: listFlights
+      parameters:
+      - description: How many items to return at one time (max 100)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 100
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Flights'
+          description: A paged array of flights
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: List all flights
+      tags:
+      - flights
+      x-accepts: application/json
+      x-tags:
+      - tag: flights
+    post:
+      operationId: createFlight
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FlightIn'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Flight'
+          description: Ok
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Create a flight
+      tags:
+      - flights
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: flights
+  /flights/{id}:
+    delete:
+      operationId: deleteFlightById
+      parameters:
+      - description: The id of the resource to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Resource deleted successfully
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Delete specific flight by id
+      tags:
+      - flights
+      x-accepts: application/json
+      x-tags:
+      - tag: flights
+    get:
+      operationId: showFlightById
+      parameters:
+      - description: The id of the resource to retrieve
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Flight'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Info for a specific flight
+      tags:
+      - flights
+      x-accepts: application/json
+      x-tags:
+      - tag: flights
+  /carModels:
+    get:
+      operationId: listCarModels
+      parameters:
+      - description: How many items to return at one time (max 100)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 100
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarModels'
+          description: A paged array of car models
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: List all car models
+      tags:
+      - carModels
+      x-accepts: application/json
+      x-tags:
+      - tag: carModels
+    post:
+      operationId: createCarModel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarModelIn'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarModel'
+          description: Ok
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Create a car model
+      tags:
+      - carModels
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: carModels
+  /carModels/{id}:
+    delete:
+      operationId: deleteCarModelById
+      parameters:
+      - description: The id of the resource to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Resource deleted successfully
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Delete specific car model by id
+      tags:
+      - carModels
+      x-accepts: application/json
+      x-tags:
+      - tag: carModels
+    get:
+      operationId: showCarModelById
+      parameters:
+      - description: The id of the resource to retrieve
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarModel'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Info for a specific car model
+      tags:
+      - carModels
+      x-accepts: application/json
+      x-tags:
+      - tag: carModels
+  /carMarks:
+    get:
+      operationId: listCarMarks
+      parameters:
+      - description: How many items to return at one time (max 100)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 100
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarMarks'
+          description: A paged array of car marks
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: List all carMarks
+      tags:
+      - carMarks
+      x-accepts: application/json
+      x-tags:
+      - tag: carMarks
+    post:
+      operationId: createCarMark
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarMarkIn'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarMark'
+          description: Ok
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Create a car mark
+      tags:
+      - carMarks
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: carMarks
+  /carMarks/{id}:
+    delete:
+      operationId: deleteCarMarkById
+      parameters:
+      - description: The id of the resource to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Resource deleted successfully
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Delete specific car by id
+      tags:
+      - carMarks
+      x-accepts: application/json
+      x-tags:
+      - tag: carMarks
+    get:
+      operationId: showCarMarkById
+      parameters:
+      - description: The id of the resource to retrieve
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarMark'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Info for a specific car mark
+      tags:
+      - carMarks
+      x-accepts: application/json
+      x-tags:
+      - tag: carMarks
+  /cars:
+    get:
+      operationId: listCars
+      parameters:
+      - description: How many items to return at one time (max 100)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 100
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cars'
+          description: A paged array of cars
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: List all cars
+      tags:
+      - cars
+      x-accepts: application/json
+      x-tags:
+      - tag: cars
+    post:
+      operationId: createCar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarIn'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+          description: Ok
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Create a car
+      tags:
+      - cars
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: cars
+  /cars/{id}:
+    delete:
+      operationId: deleteCarById
+      parameters:
+      - description: The id of the resource to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Resource deleted successfully
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Delete specific car by id
+      tags:
+      - cars
+      x-accepts: application/json
+      x-tags:
+      - tag: cars
+    get:
+      operationId: showCarById
+      parameters:
+      - description: The id of the resource to retrieve
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Info for a specific car
+      tags:
+      - cars
+      x-accepts: application/json
+      x-tags:
+      - tag: cars
+  /tours:
+    get:
+      operationId: listTours
+      parameters:
+      - description: How many items to return at one time (max 100)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 100
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tours'
+          description: A paged array of tours
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: List all tours
+      tags:
+      - tours
+      x-accepts: application/json
+      x-tags:
+      - tag: tours
+    post:
+      operationId: createTour
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TourIn'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tour'
+          description: Ok
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Create a tour
+      tags:
+      - tours
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: tours
+  /tours/{id}:
+    delete:
+      operationId: deleteTourById
+      parameters:
+      - description: The id of the tour to delete
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Resource deleted successfully
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Delete specific tour by id
+      tags:
+      - tours
+      x-accepts: application/json
+      x-tags:
+      - tag: tours
+    get:
+      operationId: showTourById
+      parameters:
+      - description: The id of the tour to retrieve
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tour'
+          description: Expected response to a valid request
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Info for a specific tour
+      tags:
+      - tours
+      x-accepts: application/json
+      x-tags:
+      - tag: tours
+components:
+  schemas:
+    ServiceClass:
+      enum:
+      - ONE
+      - TWO
+      - THREE
+      - FOUR
+      - FIVE
+      example: FIVE
+      type: string
+    CarColor:
+      enum:
+      - white
+      - black
+      - brown
+      - yellow
+      - red
+      - blue
+      - silver
+      type: string
+    TourIn:
+      example:
+        departureFlightId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        arrivalFlightId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        price: 104500.5
+        description: Тур из Москвы в Анталию
+        transferToHotelId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        transferFromHotelId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        selectedFoodOptionId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        roomId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        departureFlightId:
+          format: uuid
+          type: string
+        arrivalFlightId:
+          format: uuid
+          type: string
+        transferToHotelId:
+          format: uuid
+          type: string
+        transferFromHotelId:
+          format: uuid
+          type: string
+        description:
+          example: Тур из Москвы в Анталию
+          type: string
+        price:
+          example: 104500.5
+          type: number
+        roomId:
+          format: uuid
+          type: string
+        selectedFoodOptionId:
+          format: uuid
+          type: string
+      required:
+      - arrivalFlightId
+      - departureFlightId
+      - description
+      - name
+      - price
+      - roomId
+      - selectedFoodOptionId
+      - transferFromHotelId
+      - transferToHotelId
+      type: object
+    Tour:
+      example:
+        transferToHotel:
+          car:
+            color: null
+            model: Traveller
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            plateNumber: A123TH716RUS
+            mark: Peugeot
+          price: 5670
+          name: Тур из Москвы в Анталию
+          departureDateTime: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          arrivalDateTime: 2000-01-23T04:56:07.000+00:00
+          departureCoordinates: "55.746181, 37.624566"
+          isGuideIncluded: true
+          arrivalCoordinates: "36.891727, 30.689625"
+        transferFromHotel:
+          car:
+            color: null
+            model: Traveller
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            plateNumber: A123TH716RUS
+            mark: Peugeot
+          price: 5670
+          name: Тур из Москвы в Анталию
+          departureDateTime: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          arrivalDateTime: 2000-01-23T04:56:07.000+00:00
+          departureCoordinates: "55.746181, 37.624566"
+          isGuideIncluded: true
+          arrivalCoordinates: "36.891727, 30.689625"
+        arrivalFlight: null
+        price: 104500.5
+        selectedFoodOption: null
+        description: Тур из Москвы в Анталию
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        departureFlight: null
+        room:
+          serviceClass: FIVE
+          name: Номер на двоих с видом на море
+          hotel: null
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          pricePerNight: 5670
+      properties:
+        id:
+          format: uuid
+          type: string
+        departureFlight:
+          $ref: '#/components/schemas/Flight'
+        arrivalFlight:
+          $ref: '#/components/schemas/Flight'
+        transferToHotel:
+          $ref: '#/components/schemas/Transfer'
+        transferFromHotel:
+          $ref: '#/components/schemas/Transfer'
+        description:
+          example: Тур из Москвы в Анталию
+          type: string
+        price:
+          example: 104500.5
+          type: number
+        room:
+          $ref: '#/components/schemas/Room'
+        selectedFoodOption:
+          $ref: '#/components/schemas/FoodOption'
+      required:
+      - arrivalFlight
+      - departureFlight
+      - description
+      - id
+      - name
+      - price
+      - room
+      - selectedFoodOption
+      - transferFromHotel
+      - transferToHotel
+      type: object
+    Tours:
+      items:
+        $ref: '#/components/schemas/Tour'
+      maxItems: 100
+      type: array
+    Flights:
+      items:
+        $ref: '#/components/schemas/Flight'
+      maxItems: 100
+      type: array
+    FlightIn:
+      example:
+        departureAirport: Moscow
+        departureDateTime: 2000-01-23T04:56:07.000+00:00
+        arrivalDateTime: 2000-01-23T04:56:07.000+00:00
+        arrivalAirport: Antalia
+      properties:
+        departureAirport:
+          example: Moscow
+          type: string
+        arrivalAirport:
+          example: Antalia
+          type: string
+        departureDateTime:
+          format: date-time
+          type: string
+        arrivalDateTime:
+          format: date-time
+          type: string
+      required:
+      - arrivalAirport
+      - arrivalDateTime
+      - departureAirport
+      - departureDateTime
+      type: object
+    Flight:
+      allOf:
+      - $ref: '#/components/schemas/FlightIn'
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+    Transfers:
+      items:
+        $ref: '#/components/schemas/Transfer'
+      maxItems: 100
+      type: array
+    TransferIn:
+      example:
+        price: 5670
+        name: Тур из Москвы в Анталию
+        departureDateTime: 2000-01-23T04:56:07.000+00:00
+        arrivalDateTime: 2000-01-23T04:56:07.000+00:00
+        departureCoordinates: "55.746181, 37.624566"
+        isGuideIncluded: true
+        carId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        arrivalCoordinates: "36.891727, 30.689625"
+      properties:
+        name:
+          example: Тур из Москвы в Анталию
+          type: string
+        carId:
+          format: uuid
+          type: string
+        departureCoordinates:
+          example: "55.746181, 37.624566"
+          type: string
+        arrivalCoordinates:
+          example: "36.891727, 30.689625"
+          type: string
+        price:
+          example: 5670
+          type: number
+        departureDateTime:
+          format: date-time
+          type: string
+        arrivalDateTime:
+          format: date-time
+          type: string
+        isGuideIncluded:
+          example: true
+          type: boolean
+      required:
+      - arrivalCoordinates
+      - arrivalDateTime
+      - carId
+      - departureCoordinates
+      - departureDateTime
+      - isGuideIncluded
+      - name
+      - price
+      type: object
+    Transfer:
+      example:
+        car:
+          color: null
+          model: Traveller
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          plateNumber: A123TH716RUS
+          mark: Peugeot
+        price: 5670
+        name: Тур из Москвы в Анталию
+        departureDateTime: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        arrivalDateTime: 2000-01-23T04:56:07.000+00:00
+        departureCoordinates: "55.746181, 37.624566"
+        isGuideIncluded: true
+        arrivalCoordinates: "36.891727, 30.689625"
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          example: Тур из Москвы в Анталию
+          type: string
+        car:
+          $ref: '#/components/schemas/Car'
+        departureCoordinates:
+          example: "55.746181, 37.624566"
+          type: string
+        arrivalCoordinates:
+          example: "36.891727, 30.689625"
+          type: string
+        price:
+          example: 5670
+          type: number
+        departureDateTime:
+          format: date-time
+          type: string
+        arrivalDateTime:
+          format: date-time
+          type: string
+        isGuideIncluded:
+          example: true
+          type: boolean
+      required:
+      - arrivalCoordinates
+      - arrivalDateTime
+      - car
+      - departureCoordinates
+      - departureDateTime
+      - id
+      - isGuideIncluded
+      - name
+      - price
+      type: object
+    CarMarks:
+      items:
+        $ref: '#/components/schemas/CarMark'
+      maxItems: 100
+      type: array
+    CarMarkIn:
+      example:
+        name: Peugeot
+      properties:
+        name:
+          example: Peugeot
+          type: string
+      required:
+      - name
+      type: object
+    CarMark:
+      allOf:
+      - $ref: '#/components/schemas/CarMarkIn'
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+    CarModels:
+      items:
+        $ref: '#/components/schemas/CarModel'
+      maxItems: 100
+      type: array
+    CarModelIn:
+      example:
+        name: Traveller
+      properties:
+        name:
+          example: Traveller
+          type: string
+      required:
+      - name
+      type: object
+    CarModel:
+      allOf:
+      - $ref: '#/components/schemas/CarModelIn'
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+    Cars:
+      items:
+        $ref: '#/components/schemas/Car'
+      maxItems: 100
+      type: array
+    CarIn:
+      example:
+        markId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        color: null
+        modelId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        plateNumber: A123TH716RUS
+      properties:
+        markId:
+          format: uuid
+          type: string
+        modelId:
+          format: uuid
+          type: string
+        plateNumber:
+          example: A123TH716RUS
+          type: string
+        color:
+          $ref: '#/components/schemas/CarColor'
+      required:
+      - color
+      - markId
+      - modelId
+      - plateNumber
+      type: object
+    Car:
+      example:
+        color: null
+        model: Traveller
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        plateNumber: A123TH716RUS
+        mark: Peugeot
+      properties:
+        id:
+          format: uuid
+          type: string
+        mark:
+          example: Peugeot
+          type: string
+        model:
+          example: Traveller
+          type: string
+        plateNumber:
+          example: A123TH716RUS
+          type: string
+        color:
+          $ref: '#/components/schemas/CarColor'
+      required:
+      - color
+      - id
+      - mark
+      - model
+      - plateNumber
+      type: object
+    Rooms:
+      items:
+        $ref: '#/components/schemas/Room'
+      maxItems: 100
+      type: array
+    RoomIn:
+      example:
+        serviceClass: FIVE
+        name: Номер на двоих с видом на море
+        hotelId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        pricePerNight: 5670
+      properties:
+        name:
+          example: Номер на двоих с видом на море
+          type: string
+        serviceClass:
+          $ref: '#/components/schemas/ServiceClass'
+        pricePerNight:
+          example: 5670
+          type: number
+        hotelId:
+          format: uuid
+          type: string
+      required:
+      - hotelId
+      - name
+      - pricePerNight
+      - serviceClass
+      type: object
+    Room:
+      example:
+        serviceClass: FIVE
+        name: Номер на двоих с видом на море
+        hotel: null
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        pricePerNight: 5670
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          example: Номер на двоих с видом на море
+          type: string
+        serviceClass:
+          $ref: '#/components/schemas/ServiceClass'
+        pricePerNight:
+          example: 5670
+          type: number
+        hotel:
+          $ref: '#/components/schemas/Hotel'
+      required:
+      - hotel
+      - id
+      - name
+      - pricePerNight
+      - serviceClass
+      type: object
+    Hotels:
+      items:
+        $ref: '#/components/schemas/Hotel'
+      maxItems: 100
+      type: array
+    HotelIn:
+      example:
+        address: "Tuzcular Mah. Karanlik Sok. No 18 Kaleici, Анталья 07100 Турция"
+        serviceClass: FIVE
+        name: Тувана Отель
+        isGuideIncluded: true
+      properties:
+        name:
+          example: Тувана Отель
+          type: string
+        address:
+          example: "Tuzcular Mah. Karanlik Sok. No 18 Kaleici, Анталья 07100 Турци\
+            я"
+          type: string
+        serviceClass:
+          $ref: '#/components/schemas/ServiceClass'
+        isGuideIncluded:
+          example: true
+          type: boolean
+      required:
+      - address
+      - isGuideIncluded
+      - name
+      - serviceClass
+      type: object
+    Hotel:
+      allOf:
+      - $ref: '#/components/schemas/HotelIn'
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+    FoodOptions:
+      items:
+        $ref: '#/components/schemas/FoodOption'
+      maxItems: 100
+      type: array
+    FoodOptionIn:
+      example:
+        price: 1000
+        name: All inclusive with alcohol
+      properties:
+        name:
+          example: All inclusive with alcohol
+          type: string
+        price:
+          example: 1000
+          type: number
+      required:
+      - name
+      - price
+      type: object
+    FoodOption:
+      allOf:
+      - $ref: '#/components/schemas/FoodOptionIn'
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+    Error:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      required:
+      - code
+      - message
+      type: object
