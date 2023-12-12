@@ -187,7 +187,7 @@ class ControllerTests {
 
     private Room createRoom(Hotel hotel) {
         RoomIn roomIn = new RoomIn();
-        roomIn.setPropertyClass(ServiceClass.FIVE);
+        roomIn.setServiceClass(ServiceClass.FIVE);
         roomIn.setName("Люкс с 2мя кроватями на четверых");
         roomIn.setPricePerNight(new BigDecimal("7150"));
         roomIn.setHotelId(hotel.getId());
@@ -203,7 +203,7 @@ class ControllerTests {
     private Hotel createHotel() {
         HotelIn hotelIn = new HotelIn();
         hotelIn.setName("Sunrise Resort Hotel");
-        hotelIn.setPropertyClass(ServiceClass.FIVE);
+        hotelIn.setServiceClass(ServiceClass.FIVE);
         hotelIn.setAddress("Kizilagac Turizm Merkezi Manavgat Antalya, 07600 Kizilagac, Turkey");
         hotelIn.setIsGuideIncluded(true);
 
