@@ -184,7 +184,7 @@ class ControllerTests {
 
         return response.getBody();
     }
-
+    
     private Room createRoom(Hotel hotel) {
         RoomIn roomIn = new RoomIn();
         roomIn.setServiceClass(ServiceClass.FIVE);

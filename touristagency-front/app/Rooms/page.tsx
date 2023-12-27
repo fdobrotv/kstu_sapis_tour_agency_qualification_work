@@ -40,6 +40,7 @@ import { create, deleteById, getRooms } from './fetch';
 import { getHotels } from '../Hotels/fetch';
 import { validateRequired, validateRequiredNumber } from '../Validators/validation';
 import { UUID } from 'crypto';
+import HeaderTabs from '../Menu/Menu';
 
 const Rooms = () => {
     const [validationErrors, setValidationErrors] = useState<
@@ -453,6 +454,7 @@ const RoomsWithProviders = () => (
     //Put this with your other react-query providers near root of your app
     <QueryClientProvider client={queryClient}>
         <ModalsProvider>
+            <HeaderTabs />
             <Rooms />
         </ModalsProvider>
     </QueryClientProvider>

@@ -36,6 +36,7 @@ import {
 import { UUID } from 'crypto';
 import { create, deleteById, getFlights } from './fetch';
 import { validateRequired, validateRequiredDate } from '../Validators/validation';
+import HeaderTabs from '../Menu/Menu';
 
 const Flights = () => {
     const [validationErrors, setValidationErrors] = useState<
@@ -377,6 +378,7 @@ const FlightsWithProviders = () => (
     //Put this with your other react-query providers near root of your app
     <QueryClientProvider client={queryClient}>
         <ModalsProvider>
+            <HeaderTabs />
             <Flights />
         </ModalsProvider>
     </QueryClientProvider>

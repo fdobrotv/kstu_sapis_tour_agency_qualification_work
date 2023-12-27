@@ -1,6 +1,6 @@
 # Getting Started
 
-## Dependencies
+## Setup dependencies and base project
 
 ### Back-end
 
@@ -30,13 +30,20 @@
         ✔ Would you like to use `src/` directory? … No / Yes
         ✔ Would you like to use App Router? (recommended) … No / Yes
         ✔ Would you like to customize the default import alias (@/*)? … No / Yes
-        
-    
-### Environment
-    docker-compose up
+
+### Web packager examples
+    pnpm install clsx
 
 ## Development run
 
+### Environment
+    docker-compose up
+
+### Back-end
+    ./gradlew bootRun
+
 ### Front-end
-    npm run dev
-    curl -v http://localhost:3000
+    next dev
+
+### Open in browser
+    http://localhost:3000

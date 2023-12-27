@@ -34,6 +34,7 @@ import {
 
 import { create, deleteById, getFoodOptions } from './fetch';
 import { validateRequired, validateRequiredNumber } from '../Validators/validation';
+import HeaderTabs from '../Menu/Menu';
 
 const FoodOptions = () => {
     const [validationErrors, setValidationErrors] = useState<
@@ -331,6 +332,7 @@ const FoodOptionsWithProviders = () => (
     //Put this with your other react-query providers near root of your app
     <QueryClientProvider client={queryClient}>
         <ModalsProvider>
+            <HeaderTabs />
             <FoodOptions />
         </ModalsProvider>
     </QueryClientProvider>

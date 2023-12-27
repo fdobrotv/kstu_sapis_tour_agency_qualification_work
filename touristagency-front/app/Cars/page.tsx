@@ -47,6 +47,8 @@ import { getCarMarks } from '../CarMarks/fetchMarks';
 import { getCarModels } from '../CarModels/fetchModels';
 import { UUID } from 'crypto';
 import { validateRequired } from '../Validators/validation';
+import HeaderTabs from '../Menu/Menu';
+import { colorToText } from '../Tours/helper';
 
 let configurationParameters: ConfigurationParameters =
 {basePath: "http://127.0.0.1:8080/v1"};
@@ -234,6 +236,12 @@ const Cars = () => {
             {
                 accessorKey: 'color',
                 header: 'Color',
+                Cell: ({ cell }) =>  {
+                    let carColor = cell.getValue<CarColor>();
+                    return <Text>
+                      {colorToText(carColor)}
+                    </Text>
+                    },
                 Edit: ({ cell, column, row, table }) => {
                     const data: Array<string> = Object.values(CarColor);
                     const onBlur = (event) => {
@@ -528,6 +536,7 @@ const CarsWithProviders = () => (
     //Put this with your other react-query providers near root of your app
     <QueryClientProvider client={queryClient}>
         <ModalsProvider>
+            <HeaderTabs />
             <Cars />
         </ModalsProvider>
     </QueryClientProvider>

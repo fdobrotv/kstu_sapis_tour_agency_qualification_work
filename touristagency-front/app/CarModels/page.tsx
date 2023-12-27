@@ -39,6 +39,7 @@ import {
     DeleteCarModelByIdRequest,
 } from "@/generated";
 import { validateRequired } from '../Validators/validation';
+import HeaderTabs from '../Menu/Menu';
 
 let configurationParameters: ConfigurationParameters =
 {basePath: "http://127.0.0.1:8080/v1"};
@@ -322,6 +323,7 @@ const CarModelsWithProviders = () => (
     //Put this with your other react-query providers near root of your app
     <QueryClientProvider client={queryClient}>
         <ModalsProvider>
+            <HeaderTabs />
             <CarModels />
         </ModalsProvider>
     </QueryClientProvider>

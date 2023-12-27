@@ -29,6 +29,7 @@ import {
     useQueryClient,
 } from '@tanstack/react-query';
 import {
+    CarColor,
     Flight,
     FoodOption,
     Room,
@@ -44,6 +45,8 @@ import { getFlights } from '../Flights/fetch';
 import { getTransfers } from '../Transfers/fetchTransfers';
 import { getRooms } from '../Rooms/fetch';
 import { getFoodOptions } from '../FoodOptions/fetch';
+import { colorToText, dateToText, flightDisplayFormatter, transferDisplayFormatter, transferFormatter } from './helper';
+import HeaderTabs from '../Menu/Menu';
 
 const Tours = () => {
     const [validationErrors, setValidationErrors] = useState<
@@ -67,318 +70,8 @@ const Tours = () => {
                 },
             },
             {
-                accessorKey: 'departureFlight',
-                header: 'Departure Flight',
-                Cell: ({ cell }) =>  {
-                    let flight = cell.getValue<Flight>();
-                    return <Text>
-                      {flight?.departureAirport + " " + flight?.arrivalAirport + " " + 
-                      flight?.departureDateTime + " " + flight?.arrivalDateTime } 
-                    </Text>
-                    },
-                Edit: ({ cell, column, row, table }) => {
-                    interface Item {
-                        value: string; 
-                        label: string; 
-                    }
-
-                    const [data, setData] = useState<Array<Item>>([])
-                    const [isLoading, setLoading] = useState(true)
-                    const [selectedId, setSelectedId] = useState<UUID>()
-
-                    useEffect(() => {
-                        getFlights()
-                        .then((response: Array<Flight>) => {
-                            return response.map( (flight: Flight) => {
-                                const items = {
-                                    value: flight.id,
-                                    label: flight.departureAirport + " " + flight.arrivalAirport
-                                }
-                                return items;
-                            });
-                        })
-                        .then((data) => {
-                            setData(data)
-                            setLoading(false)
-                        })
-                    }, [])
-
-                    const onBlur = (event) => {
-                        const hTMLInputElement: HTMLInputElement = event.target;
-                        console.log(hTMLInputElement);
-
-                        row._valuesCache[column.id] = selectedId;
-                        if (isCreatingTour) {
-                            table.setCreatingRow(row);
-                        } else if (isUpdatingTour) {
-                            table.setEditingRow(row);
-                        }
-                    };
-
-                    if (isLoading) return <p>Loading...</p>
-                    if (!data) return <p>No flights data</p>
-
-                    const onChange = (event) => {
-                        console.log("handleChange");
-                        console.log(event);
-                        setSelectedId(event);
-                    }
-
-                    return <Select onChange={onChange} onBlur={onBlur}
-                        label="Departure Flight"
-                        placeholder="Pick value"
-                        data={data}
-                    />;
-                },
-                mantineEditTextInputProps: {
-                    type: 'email',
-                    required: true,
-                    error: validationErrors?.name,
-                    //remove any previous validation errors when tour focuses on the input
-                    onFocus: () =>
-                        setValidationErrors({
-                            ...validationErrors,
-                            name: undefined,
-                        }),
-                    //optionally add validation checking for onBlur or onChange
-                },
-            },
-            {
-                accessorKey: 'arrivalFlight',
-                header: 'Arrival Flight',
-                Cell: ({ cell }) =>  {
-                    let flight = cell.getValue<Flight>();
-                    return <Text>
-                      {flight.departureAirport + " " + flight.arrivalAirport + " " + 
-                      flight.departureDateTime + " " + flight.arrivalDateTime } 
-                    </Text>
-                },
-                Edit: ({ cell, column, row, table }) => {
-                    interface Item {
-                        value: string; 
-                        label: string; 
-                    }
-
-                    const [data, setData] = useState<Array<Item>>([])
-                    const [isLoading, setLoading] = useState(true)
-                    const [selectedId, setSelectedId] = useState<UUID>()
-
-                    useEffect(() => {
-                        getFlights()
-                        .then((response: Array<Flight>) => {
-                            return response.map( (flight: Flight) => {
-                                const items = {
-                                    value: flight.id,
-                                    label: flight.departureAirport + " " + flight.arrivalAirport
-                                }
-                                return items;
-                            });
-                        })
-                        .then((data) => {
-                            setData(data)
-                            setLoading(false)
-                        })
-                    }, [])
-
-                    const onBlur = (event) => {
-                        const hTMLInputElement: HTMLInputElement = event.target;
-                        console.log(hTMLInputElement);
-
-                        row._valuesCache[column.id] = selectedId;
-                        if (isCreatingTour) {
-                            table.setCreatingRow(row);
-                        } else if (isUpdatingTour) {
-                            table.setEditingRow(row);
-                        }
-                    };
-
-                    if (isLoading) return <p>Loading...</p>
-                    if (!data) return <p>No flights data</p>
-
-                    const onChange = (event) => {
-                        console.log("handleChange");
-                        console.log(event);
-                        setSelectedId(event);
-                    }
-
-                    return <Select onChange={onChange} onBlur={onBlur}
-                        label="Arrival Flight"
-                        placeholder="Pick value"
-                        data={data}
-                    />;
-                },
-                mantineEditTextInputProps: {
-                    type: 'email',
-                    required: true,
-                    error: validationErrors?.name,
-                    //remove any previous validation errors when tour focuses on the input
-                    onFocus: () =>
-                        setValidationErrors({
-                            ...validationErrors,
-                            name: undefined,
-                        }),
-                    //optionally add validation checking for onBlur or onChange
-                },
-            },
-            {
-                accessorKey: 'transferToHotel',
-                header: 'Transfer to hotel',
-                Cell: ({ cell }) =>  {
-                    let transfer = cell.getValue<Transfer>();
-                    return <Text>
-                      {transfer.departureDateTime + " " + transfer.arrivalDateTime + " " + 
-                      transfer.departureCoordinates + " " + transfer.arrivalCoordinates } 
-                    </Text>
-                },
-                Edit: ({ cell, column, row, table }) => {
-                    interface Item {
-                        value: string; 
-                        label: string; 
-                    }
-
-                    const [data, setData] = useState<Array<Item>>([])
-                    const [isLoading, setLoading] = useState(true)
-                    const [selectedId, setSelectedId] = useState<UUID>()
-
-                    useEffect(() => {
-                        getTransfers()
-                        .then((response: Array<Transfer>) => {
-                            return response.map( (transfer: Transfer) => {
-                                const items = {
-                                    value: transfer.id,
-                                    label: transfer.departureCoordinates + " " + transfer.arrivalCoordinates + " " +
-                                    transfer.departureDateTime + " " + transfer.arrivalDateTime
-                                }
-                                return items;
-                            });
-                        })
-                        .then((data) => {
-                            setData(data)
-                            setLoading(false)
-                        })
-                    }, [])
-
-                    const onBlur = (event) => {
-                        const hTMLInputElement: HTMLInputElement = event.target;
-                        console.log(hTMLInputElement);
-
-                        row._valuesCache[column.id] = selectedId;
-                        if (isCreatingTour) {
-                            table.setCreatingRow(row);
-                        } else if (isUpdatingTour) {
-                            table.setEditingRow(row);
-                        }
-                    };
-
-                    if (isLoading) return <p>Loading...</p>
-                    if (!data) return <p>No transfers data</p>
-
-                    const onChange = (event) => {
-                        console.log("handleChange");
-                        console.log(event);
-                        setSelectedId(event);
-                    }
-
-                    return <Select onChange={onChange} onBlur={onBlur}
-                        label="Transfer to hotel"
-                        placeholder="Pick value"
-                        data={data}
-                    />;
-                },
-                mantineEditTextInputProps: {
-                    type: 'email',
-                    required: true,
-                    error: validationErrors?.name,
-                    //remove any previous validation errors when tour focuses on the input
-                    onFocus: () =>
-                        setValidationErrors({
-                            ...validationErrors,
-                            name: undefined,
-                        }),
-                    //optionally add validation checking for onBlur or onChange
-                },
-            },
-            {
-                accessorKey: 'transferFromHotel',
-                header: 'Transfer from hotel',
-                Cell: ({ cell }) =>  {
-                    let transfer = cell.getValue<Transfer>();
-                    return <Text>
-                      {transfer.departureDateTime + " " + transfer.arrivalDateTime + " " + 
-                      transfer.departureCoordinates + " " + transfer.arrivalCoordinates } 
-                    </Text>
-                },
-                Edit: ({ cell, column, row, table }) => {
-                    interface Item {
-                        value: string; 
-                        label: string; 
-                    }
-
-                    const [data, setData] = useState<Array<Item>>([])
-                    const [isLoading, setLoading] = useState(true)
-                    const [selectedId, setSelectedId] = useState<UUID>()
-
-                    useEffect(() => {
-                        getTransfers()
-                        .then((response: Array<Transfer>) => {
-                            return response.map( (transfer: Transfer) => {
-                                const items = {
-                                    value: transfer.id,
-                                    label: transfer.departureCoordinates + " " + transfer.arrivalCoordinates + " " +
-                                    transfer.departureDateTime + " " + transfer.arrivalDateTime
-                                }
-                                return items;
-                            });
-                        })
-                        .then((data) => {
-                            setData(data)
-                            setLoading(false)
-                        })
-                    }, [])
-
-                    const onBlur = (event) => {
-                        const hTMLInputElement: HTMLInputElement = event.target;
-                        console.log(hTMLInputElement);
-
-                        row._valuesCache[column.id] = selectedId;
-                        if (isCreatingTour) {
-                            table.setCreatingRow(row);
-                        } else if (isUpdatingTour) {
-                            table.setEditingRow(row);
-                        }
-                    };
-
-                    if (isLoading) return <p>Loading...</p>
-                    if (!data) return <p>No transfers data</p>
-
-                    const onChange = (event) => {
-                        console.log("handleChange");
-                        console.log(event);
-                        setSelectedId(event);
-                    }
-
-                    return <Select onChange={onChange} onBlur={onBlur}
-                        label="Transfer from hotel"
-                        placeholder="Pick value"
-                        data={data}
-                    />;
-                },
-                mantineEditTextInputProps: {
-                    type: 'email',
-                    required: true,
-                    error: validationErrors?.name,
-                    //remove any previous validation errors when tour focuses on the input
-                    onFocus: () =>
-                        setValidationErrors({
-                            ...validationErrors,
-                            name: undefined,
-                        }),
-                    //optionally add validation checking for onBlur or onChange
-                },
-            },
-            {
                 accessorKey: 'description',
-                header: 'Description',
+                header: 'Описание',
                 mantineEditTextInputProps: {
                     type: 'text',
                     required: true,
@@ -394,7 +87,7 @@ const Tours = () => {
             },
             {
                 accessorKey: 'price',
-                header: 'Price',
+                header: 'Цена',
                 mantineEditTextInputProps: {
                     type: 'number',
                     required: true,
@@ -410,11 +103,11 @@ const Tours = () => {
             },
             {
                 accessorKey: 'room',
-                header: 'Room',
+                header: 'Комната',
                 Cell: ({ cell }) =>  {
                     let room = cell.getValue<Room>();
                     return <Text>
-                      {"Hotel: " + room.hotel.name + " " + room.name + " " + 
+                      {"Отель: " + room.hotel.name + " " + room.name + " " + 
                       room.serviceClass + " " + room.pricePerNight } 
                     </Text>
                 },
@@ -487,7 +180,7 @@ const Tours = () => {
             },
             {
                 accessorKey: 'selectedFoodOption',
-                header: 'Food option',
+                header: 'Опции питания',
                 Cell: ({ cell }) =>  {
                     let foodOption = cell.getValue<FoodOption>();
                     return <Text>
@@ -561,6 +254,302 @@ const Tours = () => {
                     //optionally add validation checking for onBlur or onChange
                 },
             },
+            {
+                accessorKey: 'departureFlight',
+                header: 'Рейс вылета',
+                Cell: ({ cell }) =>  {
+                    let flight = cell.getValue<Flight>();
+                    return <Text>
+                      {flightDisplayFormatter(flight)} 
+                    </Text>
+                    },
+                Edit: ({ cell, column, row, table }) => {
+                    interface Item {
+                        value: string; 
+                        label: string; 
+                    }
+
+                    const [data, setData] = useState<Array<Item>>([])
+                    const [isLoading, setLoading] = useState(true)
+                    const [selectedId, setSelectedId] = useState<UUID>()
+
+                    useEffect(() => {
+                        getFlights()
+                        .then((response: Array<Flight>) => {
+                            return response.map( (flight: Flight) => {
+                                const items = {
+                                    value: flight.id,
+                                    label: flight.departureAirport + " " + flight.arrivalAirport
+                                }
+                                return items;
+                            });
+                        })
+                        .then((data) => {
+                            setData(data)
+                            setLoading(false)
+                        })
+                    }, [])
+
+                    const onBlur = (event) => {
+                        const hTMLInputElement: HTMLInputElement = event.target;
+                        console.log(hTMLInputElement);
+
+                        row._valuesCache[column.id] = selectedId;
+                        if (isCreatingTour) {
+                            table.setCreatingRow(row);
+                        } else if (isUpdatingTour) {
+                            table.setEditingRow(row);
+                        }
+                    };
+
+                    if (isLoading) return <p>Loading...</p>
+                    if (!data) return <p>No flights data</p>
+
+                    const onChange = (event) => {
+                        console.log("handleChange");
+                        console.log(event);
+                        setSelectedId(event);
+                    }
+
+                    return <Select onChange={onChange} onBlur={onBlur}
+                        label="Departure Flight"
+                        placeholder="Pick value"
+                        data={data}
+                    />;
+                },
+                mantineEditTextInputProps: {
+                    type: 'email',
+                    required: true,
+                    error: validationErrors?.name,
+                    //remove any previous validation errors when tour focuses on the input
+                    onFocus: () =>
+                        setValidationErrors({
+                            ...validationErrors,
+                            name: undefined,
+                        }),
+                    //optionally add validation checking for onBlur or onChange
+                },
+            },
+            {
+                accessorKey: 'arrivalFlight',
+                header: 'Рейс прилёта',
+                Cell: ({ cell }) =>  {
+                    let flight = cell.getValue<Flight>();
+                    return <Text>
+                      {flightDisplayFormatter(flight)} 
+                    </Text>
+                },
+                Edit: ({ cell, column, row, table }) => {
+                    interface Item {
+                        value: string; 
+                        label: string; 
+                    }
+
+                    const [data, setData] = useState<Array<Item>>([])
+                    const [isLoading, setLoading] = useState(true)
+                    const [selectedId, setSelectedId] = useState<UUID>()
+
+                    useEffect(() => {
+                        getFlights()
+                        .then((response: Array<Flight>) => {
+                            return response.map( (flight: Flight) => {
+                                const items = {
+                                    value: flight?.id,
+                                    label: flight?.departureAirport + " " + flight?.arrivalAirport
+                                }
+                                return items;
+                            });
+                        })
+                        .then((data) => {
+                            setData(data)
+                            setLoading(false)
+                        })
+                    }, [])
+
+                    const onBlur = (event) => {
+                        const hTMLInputElement: HTMLInputElement = event.target;
+                        console.log(hTMLInputElement);
+
+                        row._valuesCache[column.id] = selectedId;
+                        if (isCreatingTour) {
+                            table.setCreatingRow(row);
+                        } else if (isUpdatingTour) {
+                            table.setEditingRow(row);
+                        }
+                    };
+
+                    if (isLoading) return <p>Loading...</p>
+                    if (!data) return <p>No flights data</p>
+
+                    const onChange = (event) => {
+                        console.log("handleChange");
+                        console.log(event);
+                        setSelectedId(event);
+                    }
+
+                    return <Select onChange={onChange} onBlur={onBlur}
+                        label="Arrival Flight"
+                        placeholder="Pick value"
+                        data={data}
+                    />;
+                },
+                mantineEditTextInputProps: {
+                    type: 'email',
+                    required: true,
+                    error: validationErrors?.name,
+                    //remove any previous validation errors when tour focuses on the input
+                    onFocus: () =>
+                        setValidationErrors({
+                            ...validationErrors,
+                            name: undefined,
+                        }),
+                    //optionally add validation checking for onBlur or onChange
+                },
+            },
+            {
+                accessorKey: 'transferToHotel',
+                header: 'Трансфер до отеля',
+                Cell: ({ cell }) =>  {
+                    let transfer = cell.getValue<Transfer>();
+                    return <Text>
+                      {transferDisplayFormatter(transfer)} 
+                    </Text>
+                },
+                Edit: ({ cell, column, row, table }) => {
+                    interface Item {
+                        value: string; 
+                        label: string; 
+                    }
+
+                    const [data, setData] = useState<Array<Item>>([])
+                    const [isLoading, setLoading] = useState(true)
+                    const [selectedId, setSelectedId] = useState<UUID>()
+
+                    useEffect(() => {
+                        getTransfers()
+                        .then((response: Array<Transfer>) => {
+                            return response.map( (transfer: Transfer) => {
+                                return transferFormatter(transfer);
+                            });
+                        })
+                        .then((data) => {
+                            setData(data)
+                            setLoading(false)
+                        })
+                    }, [])
+
+                    const onBlur = (event) => {
+                        const hTMLInputElement: HTMLInputElement = event.target;
+                        console.log(hTMLInputElement);
+
+                        row._valuesCache[column.id] = selectedId;
+                        if (isCreatingTour) {
+                            table.setCreatingRow(row);
+                        } else if (isUpdatingTour) {
+                            table.setEditingRow(row);
+                        }
+                    };
+
+                    if (isLoading) return <p>Loading...</p>
+                    if (!data) return <p>No transfers data</p>
+
+                    const onChange = (event) => {
+                        console.log("handleChange");
+                        console.log(event);
+                        setSelectedId(event);
+                    }
+
+                    return <Select onChange={onChange} onBlur={onBlur}
+                        label="Transfer to hotel"
+                        placeholder="Pick value"
+                        data={data}
+                    />;
+                },
+                mantineEditTextInputProps: {
+                    type: 'email',
+                    required: true,
+                    error: validationErrors?.name,
+                    //remove any previous validation errors when tour focuses on the input
+                    onFocus: () =>
+                        setValidationErrors({
+                            ...validationErrors,
+                            name: undefined,
+                        }),
+                    //optionally add validation checking for onBlur or onChange
+                },
+            },
+            {
+                accessorKey: 'transferFromHotel',
+                header: 'Трансфер от отеля',
+                Cell: ({ cell }) =>  {
+                    let transfer = cell.getValue<Transfer>();
+                    return <Text>
+                      {transferDisplayFormatter(transfer)} 
+                    </Text>
+                },
+                Edit: ({ cell, column, row, table }) => {
+                    interface Item {
+                        value: string; 
+                        label: string; 
+                    }
+
+                    const [data, setData] = useState<Array<Item>>([])
+                    const [isLoading, setLoading] = useState(true)
+                    const [selectedId, setSelectedId] = useState<UUID>()
+
+                    useEffect(() => {
+                        getTransfers()
+                        .then((response: Array<Transfer>) => {
+                            return response.map( (transfer: Transfer) => {
+                                return transferFormatter(transfer);
+                            });
+                        })
+                        .then((data) => {
+                            setData(data)
+                            setLoading(false)
+                        })
+                    }, [])
+
+                    const onBlur = (event) => {
+                        const hTMLInputElement: HTMLInputElement = event.target;
+                        console.log(hTMLInputElement);
+
+                        row._valuesCache[column.id] = selectedId;
+                        if (isCreatingTour) {
+                            table.setCreatingRow(row);
+                        } else if (isUpdatingTour) {
+                            table.setEditingRow(row);
+                        }
+                    };
+
+                    if (isLoading) return <p>Loading...</p>
+                    if (!data) return <p>No transfers data</p>
+
+                    const onChange = (event) => {
+                        console.log("handleChange");
+                        console.log(event);
+                        setSelectedId(event);
+                    }
+
+                    return <Select onChange={onChange} onBlur={onBlur}
+                        label="Transfer from hotel"
+                        placeholder="Pick value"
+                        data={data}
+                    />;
+                },
+                mantineEditTextInputProps: {
+                    type: 'email',
+                    required: true,
+                    error: validationErrors?.name,
+                    //remove any previous validation errors when tour focuses on the input
+                    onFocus: () =>
+                        setValidationErrors({
+                            ...validationErrors,
+                            name: undefined,
+                        }),
+                    //optionally add validation checking for onBlur or onChange
+                },
+            },
         ],
         [validationErrors],
     );
@@ -587,15 +576,17 @@ const Tours = () => {
             values,
             exitCreatingMode,
         }) => {
+        console.log("handleCreateTourValues");
+        console.log(values);
         let tourIn: TourIn = {
-            departureFlightId : values['departureFlight.id'],
-            arrivalFlightId : values['arrivalFlight.id'],
-            transferToHotelId :  values['transferToHotel.id'],
-            transferFromHotelId :  values['transferFromHotel.id'],
+            departureFlightId : values.departureFlight,
+            arrivalFlightId : values.arrivalFlight,
+            transferToHotelId :  values.transferToHotel,
+            transferFromHotelId :  values.transferFromHotel,
             description : values.description,
             price : values.price,
-            roomId : values['room.id'],
-            selectedFoodOptionId : values['selectedFoodOption.id'],
+            roomId : values.room,
+            selectedFoodOptionId : values.selectedFoodOption,
         }
         console.log("handleCreateTour");
         console.log(tourIn);
@@ -810,6 +801,7 @@ const ToursWithProviders = () => (
     //Put this with your other react-query providers near root of your app
     <QueryClientProvider client={queryClient}>
         <ModalsProvider>
+            <HeaderTabs />
             <Tours />
         </ModalsProvider>
     </QueryClientProvider>

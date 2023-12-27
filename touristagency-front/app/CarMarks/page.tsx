@@ -33,6 +33,7 @@ import {
 
 import {getCarMarks, createCarMark, deleteCarMark} from "./fetchMarks";
 import { validateRequired } from '../Validators/validation';
+import HeaderTabs from '../Menu/Menu';
 
 const CarMarks = () => {
     const [validationErrors, setValidationErrors] = useState<
@@ -302,6 +303,7 @@ const CarMarksWithProviders = () => (
     //Put this with your other react-query providers near root of your app
     <QueryClientProvider client={queryClient}>
         <ModalsProvider>
+            <HeaderTabs />
             <CarMarks />
         </ModalsProvider>
     </QueryClientProvider>

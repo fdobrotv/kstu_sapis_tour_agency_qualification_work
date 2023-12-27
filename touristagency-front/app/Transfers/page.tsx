@@ -40,6 +40,7 @@ import { UUID } from 'crypto';
 import { getCars } from "../Cars/fetchCars";
 import { create, deleteById, getTransfers } from './fetchTransfers';
 import { validateRequired, validateRequiredDate } from '../Validators/validation';
+import HeaderTabs from '../Menu/Menu';
 
 const Transfers = () => {
     const [validationErrors, setValidationErrors] = useState<
@@ -528,6 +529,7 @@ const TransfersWithProviders = () => (
     //Put this with your other react-query providers near root of your app
     <QueryClientProvider client={queryClient}>
         <ModalsProvider>
+            <HeaderTabs />
             <Transfers />
         </ModalsProvider>
     </QueryClientProvider>
