@@ -107,8 +107,8 @@ const Tours = () => {
                 Cell: ({ cell }) =>  {
                     let room = cell.getValue<Room>();
                     return <Text>
-                      {"Отель: " + room.hotel.name + " " + room.name + " " + 
-                      room.serviceClass + " " + room.pricePerNight } 
+                      {"Отель: " + room?.hotel.name + " " + room?.name + " " + 
+                      room?.serviceClass + " " + room?.pricePerNight } 
                     </Text>
                 },
                 Edit: ({ cell, column, row, table }) => {
